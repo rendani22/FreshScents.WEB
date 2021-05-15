@@ -1,77 +1,47 @@
 const config = require('./config'),
     express = require('express'),
     mongoose = require('mongoose'),
-    bodyParser = require('body-parser');
+    path = require('path'),
+    expressHandlebars = require('express-handlebars');
+    const productController = require('./controller/productController');
 
-const app = express(),
-    apiRouter = express.Router(),
-    connection = mongoose.connect(config.database, { useNewUrlParser: true }),
-    product = require('./models/product');
 
-      app.use(bodyParser.json({limit: '10mb'}));
+    const app = express();
 
-      app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
-
-      app.use(function(req, res, next)
-        {
-        /* Allow access from any requesting client */
-        res.setHeader('Access-Control-Allow-Origin', '*');
-
-        /* Allow access for any of the following Http request types */
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
-
-        /* Set the Http request header */
-        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
-            next();
-        });
+ 
 
 
 
-        apiRouter.get('/product', (req,res) => {
-            product.find({display: true}, (err, recs) => {
-                if(err) res.json({
-                    message: err.message,
-                    success: false
-                })
-
-                res.json({
-                    message: "OK",
-                    success: true,
-                    result: recs
-                });
-            });
-        });
-
-        // Insert products into the products collection
-        apiRouter.post('/product', (req,res) =>{
-
-            product.create({
-                productName : req.body.productName,
-                description : req.body.description,
-                status : req.body.status,
-                gender : req.body.gender,
-                popular : req.body.popular,
-                addedBy :  req.body.addedBy
-
-            }, (err,small) =>{
-                if(err) {
-                    res.json({
-                    message: err.message,
-                    success: false,
-                    result: req.body
-                });
-            } else{
-                res.json({
-                    message: `'${req.body.productName} saved successfully'`,
-                    success : true,
-                    result : small
-                });
-            }
-
-               
-            });
-        });
+    const connection = mongoose.connect(config.database, { useNewUrlParser: true }, (err) => {
+        if(err){console.log(err)}
+        else{console.info("MongoDb: Connection successfully")}
+    });
 
 
-      app.use('/api', apiRouter);
-      app.listen(config.port);
+    // app.engine('hbs', engines.handlebars);
+    // app.set('views', './views');
+
+
+    app.set('views', path.join(__dirname,'/views'));
+    app.engine('hbs', expressHandlebars({
+        extname: 'hbs',
+        defaultLayout:'mainLayout',
+        layoutsDir:__dirname + '/views'
+    }))
+
+    app.set('view engine', 'hbs');
+
+    app.use(express.static(__dirname + '/views'));
+
+
+    app.listen(config.port, () =>{
+        console.log(`Listing on port:` + config.port);
+    });
+
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use('/', productController);
+
+
+
+

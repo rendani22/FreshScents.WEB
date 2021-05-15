@@ -11,7 +11,8 @@ const mongoose = require('mongoose'),
         dateAdded : {type : Date, default : Date.now},
         addedBy :  {type : String, required : true},
         lastModified:  {type : Date, default : ""},
-        display : {type : Boolean, default : true}
+        display : {type : Boolean, default : true},
+        price : {type : Number, required : true}
     });
 
     module.exports = mongoose.model('product', ProductSchema);
