@@ -16,14 +16,9 @@ const express = require('express'),
      cb(null, file.originalname)
          }
      });
-
      var upload = multer({ storage: storage });
 
-
      apiRouter.post('/', upload.single('file'), (req, res, next) => {
-
-        
-
           /** When using the "single"
       data come in "req.file" regardless of the attribute "name". **/
         var tmp_path = req.file.path;
@@ -66,16 +61,72 @@ const express = require('express'),
         });
     });
 
+    // Admin page for list of products
     apiRouter.get('/admin', (req,res) => {
-        imgModel.find({display: true}).lean().exec((err, recs) => {
+        imgModel.find().lean().exec((err, recs) => {
             if(err) res.json({
                 message: err.message,
                 success: false
             })
             res.render('admin', {
                 products : recs,
-                section: "Products"});
+                section: "Products",
+                viewTitle: "Fresh Scents"});
         });
+    });
+
+    // Update product info
+    apiRouter.patch("/update/:id", async  (req, res) => {
+        try {
+            const product = await imgModel.findById(req.params.id ).exec();
+            if(product){
+            if ("productName" in req.body) {
+                product.productName = req.body.productName;
+            }
+            if ("price" in req.body) {
+                product.price = req.body.price.replace('R', '');
+            }
+            if ("status" in req.body) {
+                product.status = req.body.status
+            }
+            if ("gender" in req.body) {
+                product.gender = req.body.gender
+            }
+            if ("display" in req.body) {
+                product.display = req.body.display
+            }
+            if ("description" in req.body) {
+                product.description = req.body.description
+            }
+            if ("popular" in req.body) {
+                product.popular = req.body.popular
+            }
+            //Update product system info
+            product.lastModified = Date.now();
+            product.__v += 1;
+    
+            await product.save((err,smal) =>{
+                if(err) {
+                    res.json({
+                        success: false,
+                        message: err
+                    });
+                }else{
+                    res.json({
+                        success: true,
+                        message: "Product updated successfully"
+                    });
+                }
+            });
+            }
+
+         } catch {
+
+            res.json({
+                success: false,
+                message: "Product not found"
+            });
+        }
     });
 
 // Insert products into the products collection

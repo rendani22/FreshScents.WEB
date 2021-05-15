@@ -8,6 +8,13 @@ body {
   vertical-align: text-bottom;
 }
 
+td{
+  text-overflow: ellipsis;
+    max-width: 73px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 /*
  * Sidebar
  */

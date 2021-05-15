@@ -2,15 +2,12 @@ const config = require('./config'),
     express = require('express'),
     mongoose = require('mongoose'),
     path = require('path'),
+    moment = require("moment"),
     expressHandlebars = require('express-handlebars');
     const productController = require('./controller/productController');
-
+    // const hbs = require('hbs');
 
     const app = express();
-
- 
-
-
 
     const connection = mongoose.connect(config.database, { useNewUrlParser: true }, (err) => {
         if(err){console.log(err)}
@@ -18,15 +15,31 @@ const config = require('./config'),
     });
 
 
-    // app.engine('hbs', engines.handlebars);
-    // app.set('views', './views');
-
+    // hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
     app.set('views', path.join(__dirname,'/views'));
     app.engine('hbs', expressHandlebars({
         extname: 'hbs',
         defaultLayout:'mainLayout',
-        layoutsDir:__dirname + '/views'
+        layoutsDir:__dirname + '/views',
+        helpers: {
+            formatDate: function (date) {
+                if (!date) {return null}
+                return moment(date).format("D/M/Y");
+            },
+            display: (displayStatus) => {
+                if(displayStatus) return "Yes";
+                return "No";
+            },
+            popular: (popularStatus) => {
+                if(popularStatus) return "On Fire";
+                return "Cold";
+            },
+            status: (status) => {
+                if(status) return "Available";
+                return "Unavailable";
+            }
+        }
     }))
 
     app.set('view engine', 'hbs');

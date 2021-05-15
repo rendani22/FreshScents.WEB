@@ -99,7 +99,9 @@
         <div class="col-md-5 col-lg-4 order-md-last">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="preview-images"></div>
+                    <div id="preview-image" class="preview-images block2-pic hov-img0">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -188,42 +190,49 @@
 
       <h2>Existing Products</h2>
       <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
+        <table id="productList" class="table table-hover table-sm">
+          <thead class="table-light">
             <tr>
               <th>#</th>
               <th>Product Name</th>
               <th>Price (R)</th>
               <th>Status</th>
               <th>Gender</th>
+              <th>Display</th>
               <th>Description</th>
               <th>Popular</th>
               <th>Add By</th>
               <th>Date Added</th>
               <th>Last Modified</th>
             </tr>
-          </thead>
-          <tbody>
+          </thead> 
 
-              {{# each products}}
-            <tr>
+          <tbody>
+          {{# each products}}
+            <tr id="{{this._id}}">
               <td>{{@index}}</td>
-              <td>{{this.productName}}</td>
-              <td>R{{this.price}}</td>
-              <td>{{this.status}}</td>
-              <td>{{this.gender}}</td>
-              <td>{{this.description}}</td>
-              <td>{{this.popular}}</td>
+              <td class="text" id="productName">{{this.productName}}</td>
+              <td class="number" id="price">R{{this.price}}</td>
+              <td class="select" id="status">{{status this.status}}</td>
+              <td class="text" id="gender">{{this.gender}}</td>
+              <td class="select" id="display">{{display this.display}}</td>
+              <td class="text" id="description">{{this.description}}</td>
+              <td class="select" id="popular">{{popular this.popular}}</td>
               <td>{{this.addedBy}}</td>
-              <td>{{this.dateAdded}}</td>
-              <td>{{this.lastModified}}</td>
+              <td>{{formatDate this.dateAdded}}</td>
+              <td>{{formatDate this.lastModified}}</td>
             </tr>
-            {{/each}}
+          {{/each}}
             
-            </tr>
           </tbody>
         </table>
       </div>
     </main>
   </div>
 </div>
+
+
+<script>
+
+
+</script>
