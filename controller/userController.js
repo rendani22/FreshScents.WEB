@@ -57,7 +57,8 @@ const userSchema = require('../models/user'),
 
     module.exports.loginView = (req,res) =>{
         res.render('./loginView',{
-            layout: false
+            layout: false,
+            viewTitle: "Log in"
         });
     };
 

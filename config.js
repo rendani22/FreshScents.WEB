@@ -1,6 +1,6 @@
 const e = require("express");
 
-const environment = process.env.NODE_ENV || 'production';
+const environment = process.env.NODE_ENV || 'development';
 
 console.log(`the environment is ${environment}`)
 

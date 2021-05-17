@@ -9,6 +9,7 @@ const config = require('./config'),
     const productRoutes = require('./routes/productRoutes')
           userRoutes = require('./routes/userRoutes'),
           storeRoutes = require('./routes/storeRoutes'),
+          settingRoutes = require('./routes/settingsRoute'),
           {requireAuth,userName} = require('./middleware/authMiddleware');
 
     const app = express();
@@ -62,7 +63,7 @@ const config = require('./config'),
     app.use('*',userName);
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(userRoutes,storeRoutes)
+    app.use(userRoutes,storeRoutes,settingRoutes)
     app.use('/', requireAuth, productRoutes);
 
 

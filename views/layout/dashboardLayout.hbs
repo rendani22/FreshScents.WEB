@@ -6,9 +6,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../images/icons/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-    Fresh Scents
-  </title>
+  	<title>Fresh Scents - {{this.viewTitle}}</title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
@@ -21,7 +19,7 @@
 
 <body class="">
   <div class="wrapper ">
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+    <div class="sidebar" data-color="{{sideBarColor}}" data-background-color="white" data-image="{{sideBarImage}}">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -163,13 +161,13 @@
               <span class="badge filter badge-green" data-color="green"></span>
               <span class="badge filter badge-warning" data-color="orange"></span>
               <span class="badge filter badge-danger" data-color="danger"></span>
-              <span class="badge filter badge-rose active" data-color="rose"></span>
+              <span class="badge filter badge-rose" data-color="rose"></span>
             </div>
             <div class="clearfix"></div>
           </a>
         </li>
         <li class="header-title">Images</li>
-        <li class="active">
+        <li class="">
           <a class="img-holder switch-trigger" href="javascript:void(0)">
             <img src="../assets/img/sidebar-1.jpg" alt="">
           </a>
@@ -260,7 +258,6 @@
         }
 
         $('.fixed-plugin a').click(function(event) {
-          // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
           if ($(this).hasClass('switch-trigger')) {
             if (event.stopPropagation) {
               event.stopPropagation();
@@ -271,6 +268,8 @@
         });
 
         $('.fixed-plugin .active-color span').click(function() {
+          console.log('change')
+
           $full_page_background = $('.full-page-background');
 
           $(this).siblings().removeClass('active');
@@ -289,6 +288,7 @@
           if ($sidebar_responsive.length != 0) {
             $sidebar_responsive.attr('data-color', new_color);
           }
+          changeSetting(new_color,'sideBarColor');
         });
 
         $('.fixed-plugin .background-color .badge').click(function() {
@@ -315,8 +315,11 @@
             $sidebar_img_container.fadeOut('fast', function() {
               $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
               $sidebar_img_container.fadeIn('fast');
+              
             });
           }
+
+
 
           if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
             var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
@@ -338,7 +341,27 @@
           if ($sidebar_responsive.length != 0) {
             $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
           }
+
+          console.log('s');
+          changeSetting(new_image,"sideBarImage")
         });
+
+                async function changeSetting(newSetting,settingType){
+                  try{
+                  const res = await fetch('/changeSetting',{
+                    method: "POST",
+                    body: JSON.stringify({[settingType]:newSetting}),
+                    headers: {'Content-Type': 'application/json'}
+                  });
+                  let data = await res.json();
+                  console.log(data);
+                  if(data.success){
+                    {{!-- location.assign('/dashboard') --}}
+                  }
+                }catch(err){
+                  console.log(err)
+                }
+          }
 
         $('.switch-sidebar-image input').change(function() {
           $full_page_background = $('.full-page-background');

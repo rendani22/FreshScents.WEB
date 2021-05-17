@@ -1,4 +1,6 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'),
+      mongoose = require('mongoose'),
+      settingsSchema = require('../models/settings');;
 
 const requireAuth = (req,res,next) => {
     const token = req.cookies.jwt;
@@ -17,12 +19,16 @@ const requireAuth = (req,res,next) => {
     }
 }
 
-const userName = (req,res,next) => {
+const userName = async (req,res,next) => {
     const username = req.cookies.username;
+    const settingDetails = await settingsSchema.findOne().exec();
 
     if(username){
+        res.locals.sideBarColor = settingDetails.sideBarColor;
+        res.locals.sideBarImage = settingDetails.sideBarImage;
+        res.locals.siteName = settingDetails.siteName;
+        
         res.locals.username = username;
-        console.log(username);
         next();
     }else{
         next();
@@ -30,4 +36,11 @@ const userName = (req,res,next) => {
 
 }
 
-module.exports = {requireAuth,userName};
+const siteSettings =async (req,res,next) => {
+    const settingDetails = await settingsSchema.findOne().exec();
+    console.log(settingDetails)
+    res.locals.settingDetails = settingDetails;
+    next();
+}
+
+module.exports = {requireAuth,userName,siteSettings};

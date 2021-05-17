@@ -41,7 +41,7 @@ const mongoose = require('mongoose');
         })
         res.render('productList', {
             products : recs,
-            viewTitle: "Fresh Scents",
+            viewTitle: "Store",
             whatsappMessage: "hi,\nI hope you are well.\nI would like to order"});
     });
 };
@@ -58,7 +58,7 @@ const mongoose = require('mongoose');
                 layout: './layout/dashboardLayout',
                 section: "Products",
                 subtitle: "List of products that have been added",
-                viewTitle: "Fresh Scents"});
+                viewTitle: "Products"});
         });
     };
 
@@ -66,7 +66,8 @@ const mongoose = require('mongoose');
         res.render('./dashboardViews/dashboardView',{
             layout: './layout/dashboardLayout',
             section: "Dashboard",
-            subtitle: "Insight to what is happing"
+            subtitle: "Insight to what is happing",
+            viewTitle: "Dashboard"
         })
     };
 
@@ -74,7 +75,8 @@ const mongoose = require('mongoose');
         res.render('./dashboardViews/addProductView',{
             layout: './layout/dashboardLayout',
             section: "New Product",
-            subtitle: "Add new product to list"
+            subtitle: "Add new product to list",
+            viewTitle: "Add Product"
         });
     };
 
@@ -83,7 +85,8 @@ const mongoose = require('mongoose');
         await userSchema.findOne({username}).lean().exec((err, recs) => {
                 res.render('./dashboardViews/profileView',{
                     layout: './layout/dashboardLayout',
-                    user: recs
+                    user: recs,
+                    viewTitle: "Profile"
                 });
         });
     }
