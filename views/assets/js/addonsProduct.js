@@ -74,7 +74,7 @@ async function updateProductDetails (productId,columnName,newValue,element){
       var settings = {
     "async": true,
     "crossDomain": true,
-    "url": `http://localhost:8080/update/${productId}`,
+    "url": `/update/${productId}`,
     "method": "PATCH",
     "headers": {
       "content-type": "application/x-www-form-urlencoded",
