@@ -806,6 +806,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   .menu-mobile {
     display: none;
   }
+
 }
 
 
@@ -859,7 +860,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 }
 
 @media (max-width: 991px) {
-  .wrap-sidebar {
+  .wrap-sidebar, .banner {
     display: none;
   }
 }
@@ -3330,3 +3331,34 @@ input.num-product::-webkit-inner-spin-button {
   }
 
 }
+
+.banner {
+  background-color: #bad1f9;
+  color: white;
+  text-align: center;
+  width: 217px;
+  position: absolute;
+  top:0%;
+  height: 26px;
+  font-size: 16px;
+  opacity: 50%;
+}
+
+.left-triangle, .right-triangle {
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+/* .left-triangle {
+  border-top: 25px solid #5078b9;
+  border-left: 25px solid transparent;
+  margin-top: 14px;
+}
+
+.right-triangle {
+  border-top: 25px solid #5078b9;
+  border-right: 25px solid transparent;
+  margin-top: 14px;
+  margin-left:  217px;
+} */

@@ -3,11 +3,17 @@ const config = require('./config'),
     mongoose = require('mongoose'),
     path = require('path'),
     moment = require("moment"),
-    expressHandlebars = require('express-handlebars');
-    const productController = require('./controller/productController');
-    // const hbs = require('hbs');
+    expressHandlebars = require('express-handlebars'),
+    cookieParser = require('cookie-parser') ;
+
+    const productRoutes = require('./routes/productRoutes')
+          userRoutes = require('./routes/userRoutes'),
+          storeRoutes = require('./routes/storeRoutes'),
+          {requireAuth} = require('./middleware/authMiddleware');
 
     const app = express();
+
+    app.use(cookieParser());
 
     const connection = mongoose.connect(config.database, { useNewUrlParser: true }, (err) => {
         if(err){console.log(err)}
@@ -15,7 +21,11 @@ const config = require('./config'),
     });
 
 
+    const title = "Fresh Scent";
+    
+
     // hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
+    
 
     app.set('views', path.join(__dirname,'/views'));
     app.engine('hbs', expressHandlebars({
@@ -46,14 +56,14 @@ const config = require('./config'),
 
     app.use(express.static(__dirname + '/views'));
 
-
     app.listen(config.port, () =>{
         console.log(`Listing on port:` + config.port);
     });
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use('/', productController);
+    app.use(userRoutes,storeRoutes)
+    app.use('/', requireAuth, productRoutes);
 
 
 

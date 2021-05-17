@@ -1,82 +1,95 @@
-const express = require('express'),
-    mongoose = require('mongoose');
-    product = require('../models/product'),
-     products = mongoose.model('product'),
-     apiRouter = express.Router();
+const mongoose = require('mongoose');
      var fs = require('fs');
-     var path = require('path');
-     var imgModel = require('../models/productImage');
-     var multer = require('multer');
- 
-     var storage = multer.diskStorage({
-         destination: (req, file, cb) => {
-         cb(null, 'uploads')
-        },
-     filename: (req, file, cb) => {
-     cb(null, file.originalname)
-         }
-     });
-     var upload = multer({ storage: storage });
+     var imgModel = require('../models/productImage'),
+         userSchema = require('../models/user');
 
-     apiRouter.post('/', upload.single('file'), (req, res, next) => {
-          /** When using the "single"
-      data come in "req.file" regardless of the attribute "name". **/
-        var tmp_path = req.file.path;
+    module.exports.createProduct = (req, res, next) => {
+        /** When using the "single"
+    data come in "req.file" regardless of the attribute "name". **/
+      var tmp_path = req.file.path;
+      let img = fs.readFileSync(tmp_path);
+      let encodedImage = img.toString('base64');
+      var obj = {
+          productName : req.body.productName,
+          description : req.body.description,
+          status : req.body.status,
+          gender : req.body.gender,
+          popular : req.body.popular,
+          addedBy :  "Admin",
+          price : req.body.price,
+          img: {
+              data: encodedImage,
+              contentType: req.file.mimetype
+          }
+      }
+      imgModel.create(obj, (err, item) => {
+          if (err) {
+              console.log(err);
+          }
+          else {
+              // item.save();
+              res.redirect('/addProduct');
+          }
+      });
+  };
 
-        let img = fs.readFileSync(tmp_path);
-        let encodedImage = img.toString('base64');
-        var obj = {
-            productName : req.body.productName,
-            description : req.body.description,
-            status : req.body.status,
-            gender : req.body.gender,
-            popular : req.body.popular,
-            addedBy :  "Admin",
-            price : req.body.price,
-            img: {
-                data: encodedImage,
-                contentType: req.file.mimetype
-            }
-        }
-        imgModel.create(obj, (err, item) => {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                // item.save();
-                res.redirect('/admin');
-            }
-        });
+  module.exports.findDisplayProducts = (req,res) => {
+    imgModel.find({display: true}).lean().exec((err, recs) => {
+        if(err) res.json({
+            message: err.message,
+            success: false
+        })
+        res.render('productList', {
+            products : recs,
+            viewTitle: "Fresh Scents",
+            whatsappMessage: "hi,\nI hope you are well.\nI would like to order"});
     });
-
-    apiRouter.get('/', (req,res) => {
-        imgModel.find({display: true}).lean().exec((err, recs) => {
-            if(err) res.json({
-                message: err.message,
-                success: false
-            })
-            res.render('productList', {
-                products : recs,
-                viewTitle: "Fresh Scents"});
-        });
-    });
+};
 
     // Admin page for list of products
-    apiRouter.get('/admin', (req,res) => {
+    module.exports.findAllProducts = (req,res) => {
         imgModel.find().lean().exec((err, recs) => {
             if(err) res.json({
                 message: err.message,
                 success: false
             })
-            res.render('admin', {
+            res.render('./dashboardViews/productsView', {
                 products : recs,
+                layout: './layout/dashboardLayout',
                 section: "Products",
+                subtitle: "List of products that have been added",
                 viewTitle: "Fresh Scents"});
         });
-    });
+    };
+
+    module.exports.dashboard = (req,res) =>{
+        res.render('./dashboardViews/dashboardView',{
+            layout: './layout/dashboardLayout',
+            section: "Dashboard",
+            subtitle: "Insight to what is happing"
+        })
+    };
+
+    module.exports.addProduct = (req,res) =>{
+        res.render('./dashboardViews/addProductView',{
+            layout: './layout/dashboardLayout',
+            section: "New Product",
+            subtitle: "Add new product to list"
+        });
+    };
+
+    module.exports.profile = async (req,res) =>{
+        const username = req.cookies.username;
+        await userSchema.findOne({username}).lean().exec((err, recs) => {
+                res.render('./dashboardViews/profileView',{
+                    layout: './layout/dashboardLayout',
+                    user: recs
+                });
+        });
+    }
 
     // Update product info
-    apiRouter.patch("/update/:id", async  (req, res) => {
+   module.exports.updateProduct = async (req, res) => {
         try {
             const product = await imgModel.findById(req.params.id ).exec();
             if(product){
@@ -127,40 +140,4 @@ const express = require('express'),
                 message: "Product not found"
             });
         }
-    });
-
-// Insert products into the products collection
-apiRouter.post('/product', (req,res) =>{
-    console.log(req.body)
-
-    products.create({
-        productName : req.body.productName,
-        description : req.body.description,
-        status : req.body.status,
-        gender : req.body.gender,
-        popular : req.body.popular,
-        addedBy :  "Admin",
-        price : req.body.price
-
-    }, (err,small) =>{
-        if(err) {
-            res.json({
-            message: err.message,
-            success: false,
-            result: req.body
-        });
-    } else{
-        res.json({
-            message: `'${req.body.productName} saved successfully'`,
-            success : true,
-            result : small
-        });
-    }
-    });
-});
-
-function insertRecord(req,res){
-
-}
-
-module.exports = apiRouter;
+    };

@@ -1,0 +1,57 @@
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">{{section}}</h4>
+                  <a style="color: white;" class="float-right" href="addProduct">
+                    <i class="material-icons">add</i>
+                  </a>
+                  <p class="card-category"> {{subtitle}}</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table id="productList" class="table table-hover">
+                      <thead class=" text-primary">
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Price (R)</th>
+                        <th>Status</th>
+                        <th>Gender</th>
+                        <th>Display</th>
+                        <th>Description</th>
+                        <th>Popular</th>
+                        <th>Add By</th>
+                        <th>Date Added</th>
+                        <th>Last Modified</th>
+                      </thead>
+                      <tbody>
+                          {{# each products}}
+                            <tr id="{{this._id}}">
+                              <td>{{@index}}</td>
+                              <td class="text" id="productName">{{this.productName}}</td>
+                              <td class="number text-primary" id="price">R{{this.price}}</td>
+                              <td class="select" id="status">{{status this.status}}</td>
+                              <td class="text" id="gender">{{this.gender}}</td>
+                              <td class="select" id="display">{{display this.display}}</td>
+                              <td class="text" id="description">{{this.description}}</td>
+                              <td class="select" id="popular">{{popular this.popular}}</td>
+                              <td>{{this.addedBy}}</td>
+                              <td>{{formatDate this.dateAdded}}</td>
+                              <td>{{formatDate this.lastModified}}</td>
+                            </tr>
+                          {{/each}}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="../assets/js/addonsProduct.js"></script>
+     

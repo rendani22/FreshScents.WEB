@@ -1,0 +1,138 @@
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title">{{section}}</h4>
+                  <p class="card-category">{{subtitle}}</p>
+                </div>
+                <div class="card-body">
+                  <form class="needs-validation" novalidate
+                        action="/createProduct"
+                        method="POST"
+                        enctype="multipart/form-data">
+
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <label class="bmd-label-floating" for="productName">Product Name</label>
+                          <input type="text" class="form-control" name="productName" id="productName" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                Valid Product name is required.
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Price (R)</label>
+                          <input type="number" name="price" id="price" class="form-control" required>
+                          <div class="invalid-feedback">
+                            Price required.
+                        </div>
+                        </div>
+                        
+                      </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Gender</label>
+                          <select class="form-control" name="gender" id="gender" required>
+                                        <option value="">Choose...</option>
+                                        <option value=Female>Female</option>
+                                        <option value=Male>Male</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid gender.
+                            </div>
+                        </div>
+                      </div>
+                        <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Status</label>
+                                    <select class="form-control" name="status" id="status" required>
+                                        <option value="">Choose...</option>
+                                        <option value=true>Available</option>
+                                        <option value=false>Unavailable</option>
+                                    </select>
+                            <div class="invalid-feedback">
+                                Please select a valid status.
+                            </div>
+                        </div>
+                      </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                            <label for="popular" class="form-label">Popular</label>
+                            <select class="form-control" name="popular" id="popular" required>
+                                <option value="">Choose...</option>
+                                <option value="true">On Fire</option>
+                                <option value="false">Cold</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid popular status.
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-5"  style="display: none;">
+                                    <label for="productImage" class="form-label">Product Image</label>
+                                    <input class="form-control" type="file" name="file" id="productImage" required>
+
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please insert a valid product image.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Description</label>
+                          <div class="form-group">
+                            <label class="bmd-label-floating"> A short description about the product</label>
+                            <textarea class="form-control"  name="description" id="description" rows="5"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary pull-right">Save Product</button>
+                    <div class="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card card-profile">
+                <div class="card-avatar">
+                  <a href="#pablo">
+                    <img class="img" src="../assets/img/faces/avatar.jpg" />
+                  </a>
+                </div>
+                <div class="card-body">
+                  <h6 class="card-category text-gray">Product Image</h6>
+                    <div id="preview-image" class="preview-images hov-img0">
+
+                    </div>
+                  <a href="#" id="addImage" class="btn btn-primary btn-round">Add Image</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+     
+    
