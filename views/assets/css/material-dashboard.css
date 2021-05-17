@@ -40,6 +40,7 @@ td{
   transition: transform 0.9s ease;
 }
 
+
 .hov-img0:hover img {
   -webkit-transform: scale(1.1);
   -moz-transform: scale(1.1);

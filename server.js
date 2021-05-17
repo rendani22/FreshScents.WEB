@@ -9,7 +9,7 @@ const config = require('./config'),
     const productRoutes = require('./routes/productRoutes')
           userRoutes = require('./routes/userRoutes'),
           storeRoutes = require('./routes/storeRoutes'),
-          {requireAuth} = require('./middleware/authMiddleware');
+          {requireAuth,userName} = require('./middleware/authMiddleware');
 
     const app = express();
 
@@ -59,7 +59,7 @@ const config = require('./config'),
     app.listen(config.port, () =>{
         console.log(`Listing on port:` + config.port);
     });
-
+    app.use('*',userName);
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(userRoutes,storeRoutes)

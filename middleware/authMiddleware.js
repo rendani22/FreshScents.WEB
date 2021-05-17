@@ -17,4 +17,17 @@ const requireAuth = (req,res,next) => {
     }
 }
 
-module.exports = {requireAuth};
+const userName = (req,res,next) => {
+    const username = req.cookies.username;
+
+    if(username){
+        res.locals.username = username;
+        console.log(username);
+        next();
+    }else{
+        next();
+    }
+
+}
+
+module.exports = {requireAuth,userName};
